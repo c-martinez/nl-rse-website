@@ -40,24 +40,18 @@
   </div>
 </template>
 
-<script>
-export default {
+<script setup>
+// Fetch all events
+const { data: articles } = await useAsyncData('events', () =>
+  queryContent('events')
+    .sort({ date: -1 })
+    .find()
+)
 
-  transition: 'fade',
-  async asyncData ({ $content, params }) {
-    const articles = await $content('events')
-      .sortBy('date', 'desc')
-      .fetch()
-    return {
-      articles
-    }
-  },
-  methods: {
-    formatDate (date) {
-      const options = { year: 'numeric', month: 'long', day: 'numeric' }
-      return new Date(date).toLocaleDateString('en', options)
-    }
-  }
+// Helper function for date formatting
+const formatDate = (date) => {
+  const options = { year: 'numeric', month: 'long', day: 'numeric' }
+  return new Date(date).toLocaleDateString('en', options)
 }
 </script>
 
